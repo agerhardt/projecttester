@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            objectClass="org.eclipse.jdt.core.IJavaProject"
+            id="de.age.projectTester.testProject">
+         <menu
+               label="Test Project"
+               path="additions"
+               id="de.age.projectTester.menu1">
+            <separator
+                  name="group1">
+            </separator>
+         </menu>
+         <action
+               label="Test Project"
+               class="de.age.projecttester.popup.actions.TestProjectAction"
+               menubarPath="projectTester.menu1/group1"
+               enablesFor="1"
+               id="de.age.projectTester.newAction">
+         </action>
+      </objectContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            name="Project Testing Setup"
+            nameFilter="*.*"
+            class="de.age.projecttester.properties.TestProjectPropertyPage"
+            id="de.age.projectTester.properties.samplePropertyPage">
+         <enabledWhen>
+            <instanceof
+                  value="org.eclipse.jdt.core.IJavaProject">
+            </instanceof>
+         </enabledWhen>
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            id="de.age.projectTester.testProjectCommand"
+            name="Run project test command">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="de.age.projectTester.testProjectCommand"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M3+F6">
+      </key>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="de.age.projecttester.handlers.RunProjectTestHandler"
+            commandId="de.age.projectTester.RunProjectTestCommand">
+      </handler>
+   </extension>
+
+</plugin>
