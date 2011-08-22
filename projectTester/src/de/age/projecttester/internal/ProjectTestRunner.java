@@ -15,5 +15,8 @@ public class ProjectTestRunner {
 		for (String className : project.getTestclassNames()) {
 			junit.runClass(className);
 		}
+		for (Project depProject : project.getDependantProjects()) {
+			testProject(depProject);
+		}
 	}
 }

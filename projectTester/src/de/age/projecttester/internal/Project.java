@@ -4,4 +4,6 @@ public interface Project {
 
 	String[] getTestclassNames();
 
+	Project[] getDependantProjects();
+	
 }

@@ -17,6 +17,7 @@ public class ProjectTestRunnerTest {
 		
 		Project project = EasyMock.createMock(Project.class);
 		EasyMock.expect(project.getTestclassNames()).andReturn(new String[] { className1, className2} );
+		EasyMock.expect(project.getDependantProjects()).andReturn(new Project[0]);
 		
 		JUnit junitMock = EasyMock.createMock(JUnit.class);
 		junitMock.runClass(className1);
@@ -25,6 +26,30 @@ public class ProjectTestRunnerTest {
 		
 		ProjectTestRunner runner = new ProjectTestRunner(junitMock);
 		runner.testProject(project);
+		
+		EasyMock.verify(junitMock);
+	}
+	
+	@Test
+	public void testProjectRunsTestsInDependantProject() {
+		String className1 = "className1";
+		String dependantClassName = "depClassName2";
+		
+		Project mainProject = EasyMock.createMock(Project.class);
+		Project depProject = EasyMock.createMock(Project.class);
+		
+		EasyMock.expect(depProject.getTestclassNames()).andReturn(new String[] { dependantClassName });
+		EasyMock.expect(depProject.getDependantProjects()).andReturn(new Project[0]);
+		EasyMock.expect(mainProject.getTestclassNames()).andReturn(new String[] { className1 });
+		EasyMock.expect(mainProject.getDependantProjects()).andReturn(new Project[] { depProject });
+		
+		JUnit junitMock = EasyMock.createMock(JUnit.class);
+		junitMock.runClass(className1);
+		junitMock.runClass(dependantClassName);
+		EasyMock.replay(junitMock, mainProject, depProject);
+		
+		ProjectTestRunner runner = new ProjectTestRunner(junitMock);
+		runner.testProject(mainProject);
 		
 		EasyMock.verify(junitMock);
 	}
