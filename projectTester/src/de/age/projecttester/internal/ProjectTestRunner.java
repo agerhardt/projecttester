@@ -1,5 +1,8 @@
 package de.age.projecttester.internal;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class ProjectTestRunner {
 
 	private JUnit junit;
@@ -12,16 +15,31 @@ public class ProjectTestRunner {
 	}
 
 	public void testProject(Project project) {
-		String[] testclassNames = project.getTestclassNames();
-		if (testclassNames != null) {
-			for (String className : testclassNames) {
-				junit.runClass(className);
+		Set<Project> testProjects = new HashSet<Project>();
+
+		Set<Project> uncheckedProjects = new HashSet<Project>();
+		uncheckedProjects.add(project);
+
+		while (!uncheckedProjects.isEmpty()) {
+			Project nextProject = uncheckedProjects.iterator().next();
+			uncheckedProjects.remove(nextProject);
+			testProjects.add(nextProject);
+			Project[] depProjects = nextProject.getDependantProjects();
+			if (depProjects != null) {
+				for (Project p : depProjects) {
+					if (!testProjects.contains(p)) {
+						uncheckedProjects.add(p);
+					}
+				}
 			}
 		}
-		Project[] dependantProjects = project.getDependantProjects();
-		if (dependantProjects != null) {
-			for (Project depProject : dependantProjects) {
-				testProject(depProject);
+
+		for (Project p : testProjects) {
+			String[] testclassNames = p.getTestclassNames();
+			if (testclassNames != null) {
+				for (String className : testclassNames) {
+					junit.runClass(className);
+				}
 			}
 		}
 	}
