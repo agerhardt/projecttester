@@ -53,5 +53,37 @@ public class ProjectTestRunnerTest {
 		
 		EasyMock.verify(junitMock);
 	}
+	
+	@Test
+	public void testProjectCanCopeWithEmptyLists() {
+		Project project = EasyMock.createMock(Project.class);
+		EasyMock.expect(project.getTestclassNames()).andReturn(new String[0]);
+		EasyMock.expect(project.getDependantProjects()).andReturn(new Project[0]);
+		
+		JUnit junitMock = EasyMock.createMock(JUnit.class);
+		
+		EasyMock.replay(junitMock, project);
+
+		ProjectTestRunner runner = new ProjectTestRunner(junitMock);
+		runner.testProject(project);
+		
+		EasyMock.verify(junitMock);
+	}
+	
+	@Test
+	public void testProjectCanCopeWithNullLists() {
+		Project project = EasyMock.createMock(Project.class);
+		EasyMock.expect(project.getTestclassNames()).andReturn(null);
+		EasyMock.expect(project.getDependantProjects()).andReturn(null);
+		
+		JUnit junitMock = EasyMock.createMock(JUnit.class);
+		
+		EasyMock.replay(junitMock, project);
+
+		ProjectTestRunner runner = new ProjectTestRunner(junitMock);
+		runner.testProject(project);
+		
+		EasyMock.verify(junitMock);
+	}
 
 }
