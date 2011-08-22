@@ -11,6 +11,9 @@ public class ProjectTestRunner {
 		this.junit = junit;
 	}
 
-	public void testProject() {
+	public void testProject(Project project) {
+		for (String className : project.getTestclassNames()) {
+			junit.runClass(className);
+		}
 	}
 }

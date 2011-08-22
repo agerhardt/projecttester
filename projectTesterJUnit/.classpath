@@ -9,5 +9,7 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/projectTesterTest/lib/easymock-3.0-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="lib/cglib-nodep-2.2.2.jar"/>
+	<classpathentry kind="lib" path="lib/objenesis-1.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
