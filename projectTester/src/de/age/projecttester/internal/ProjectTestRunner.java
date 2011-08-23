@@ -35,7 +35,7 @@ public class ProjectTestRunner {
 		}
 
 		for (Project p : testProjects) {
-			String[] testclassNames = p.getTestclassNames();
+			String[] testclassNames = p.getTestableClassnames();
 			if (testclassNames != null) {
 				for (String className : testclassNames) {
 					junit.runClass(className);
