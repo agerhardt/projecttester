@@ -5,9 +5,12 @@ package de.age.projecttester.internal;
  */
 public class ConfigurableProject implements Project {
 
-	public ConfigurableProject(Project project) {
+	public ConfigurableProject(Project project, Configuration config) {
 		if (project == null) {
 			throw new NullPointerException("Project must not be null");
+		}
+		if (config == null) {
+			throw new NullPointerException("Configuration must not be null");
 		}
 	}
 
