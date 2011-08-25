@@ -34,7 +34,7 @@ public class ConfigurableProject implements Project {
 
 	@Override
 	public Project[] getDependantProjects() {
-		return null;
+		return wrappedProject.getDependantProjects();
 	}
 
 }

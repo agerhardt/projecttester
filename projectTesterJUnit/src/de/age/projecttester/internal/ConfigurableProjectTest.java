@@ -27,13 +27,39 @@ public class ConfigurableProjectTest {
 		Configuration config = EasyMock.createMock(Configuration.class);
 		Project project = EasyMock.createMock(Project.class);
 		EasyMock.expect(config.getTestClassFilter()).andStubReturn(filter);
-		EasyMock.expect(project.getTestableClassnames()).andStubReturn(new String[] { "SomeTest", "SomeNonTestClass" } );
-		EasyMock.expect(project.getDependantProjects()).andStubReturn(new Project[0]);
+		String testedClassname = "SomeTest";
+		EasyMock.expect(project.getTestableClassnames()).andStubReturn(new String[] { testedClassname, "SomeNonTestClass" } );
 		
 		EasyMock.replay(config, project);
 		
 		ConfigurableProject configProject = new ConfigurableProject(project, config);
-		assertThat(configProject.getTestableClassnames(), is(equalTo(new String[] { "SomeTest" })));
+		assertThat(configProject.getTestableClassnames(), is(equalTo(new String[] { testedClassname })));
+	}
+	
+	@Test
+	public void unfilteredProjectsAndClassnames() {
+		TestClassFilter filter = new TestClassFilter() {
+			@Override
+			public boolean accept(String testclassName) {
+				return true;
+			}
+		};
+		
+		Configuration config = EasyMock.createMock(Configuration.class);
+		Project project = EasyMock.createMock(Project.class);
+		Project depProject1 = EasyMock.createMock(Project.class);
+		Project depProject2 = EasyMock.createMock(Project.class);
+		EasyMock.expect(config.getTestClassFilter()).andStubReturn(filter);
+		String[] testableClassnames = new String[] { "SomeTest", "SomeNonTestClass" };
+		EasyMock.expect(project.getTestableClassnames()).andStubReturn(testableClassnames);
+		Project[] dependantProjects = new Project[] { depProject1, depProject2 };
+		EasyMock.expect(project.getDependantProjects()).andStubReturn(dependantProjects);
+		
+		EasyMock.replay(config, project);
+		
+		ConfigurableProject configProject = new ConfigurableProject(project, config);
+		assertThat(configProject.getTestableClassnames(), is(equalTo(testableClassnames)));
+		assertThat(configProject.getDependantProjects(), is(equalTo(dependantProjects)));
 	}
 
 }
