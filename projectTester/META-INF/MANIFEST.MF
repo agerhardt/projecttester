@@ -7,6 +7,7 @@ Bundle-Activator: de.age.projecttester.ProjectTesterActivator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.core.resources,
- org.junit
+ org.junit,
+ org.eclipse.jdt.core;bundle-version="3.7.0"
 Eclipse-LazyStart: true
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
