@@ -81,7 +81,7 @@ public class ApiExperiments {
 					}
 				} else if (resource instanceof IFile) {
 					IJavaProject project = JavaCore.create((IProject) resource.getProject());
-					javaElements.add(project.findElement(resource.getFullPath()));
+					javaElements.add(project.findElement(resource.getProjectRelativePath()));
 					return false;
 				} else {
 					return true;
@@ -90,5 +90,6 @@ public class ApiExperiments {
 		});
 		assertThat(javaElements.isEmpty(), is(false));
 	}
+	
 	
 }
