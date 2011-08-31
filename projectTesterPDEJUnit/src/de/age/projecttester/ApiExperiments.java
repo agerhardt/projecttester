@@ -6,6 +6,8 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 
+import junit.framework.JUnit4TestAdapter;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -13,10 +15,13 @@ import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.junit.Test;
+import org.junit.runner.JUnitCore;
 
 public class ApiExperiments {
 
@@ -91,5 +96,26 @@ public class ApiExperiments {
 		assertThat(javaElements.isEmpty(), is(false));
 	}
 	
+	@Test
+	public void howToFindTestCases() throws OperationCanceledException, CoreException {
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+		final ArrayList<IProject> projects = new ArrayList<IProject>();
+		workspace.getRoot().accept(new IResourceVisitor() {
+			
+			@Override
+			public boolean visit(IResource resource) throws CoreException {
+				if (resource instanceof IProject) {
+					if (((IProject) resource).hasNature(JavaCore.NATURE_ID))
+						projects.add((IProject) resource);
+					return false;
+				} else {
+					return true;
+				}
+			}
+		});
+		IJavaProject javaProject = JavaCore.create(projects.get(0));
+		IType[] testTypes = org.eclipse.jdt.junit.JUnitCore.findTestTypes(javaProject, null);
+		assertThat(testTypes.length > 0, is(true));
+	}
 	
 }
