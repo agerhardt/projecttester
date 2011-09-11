@@ -1,0 +1,14 @@
+INDEX VERSION 1.126+C:\Dokumente und Einstellungen\Tumbleweed\Eigene Dateien\_dev\gitrepos\projecttester\projectTesterPDEJUnit\testworkspace\.metadata\.plugins\org.eclipse.jdt.core
+4051910097.index
+1214717814.index
+445781136.index
+3824955013.index
+619536645.index
+1147520036.index
+3397661582.index
+1979094079.index
+2166453801.index
+1550214616.index
+4263614790.index
+3876969130.index
+2248581303.index
