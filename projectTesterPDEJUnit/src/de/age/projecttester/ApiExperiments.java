@@ -17,27 +17,16 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.debug.core.DebugPlugin;
-import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationType;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
-import org.eclipse.debug.core.ILaunchDelegate;
 import org.eclipse.debug.core.ILaunchManager;
-import org.eclipse.debug.core.Launch;
-import org.eclipse.debug.internal.core.LaunchConfiguration;
-import org.eclipse.debug.internal.core.LaunchManager;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.internal.launching.LaunchingPlugin;
-import org.eclipse.jdt.junit.JUnitCore;
 import org.eclipse.jdt.junit.TestRunListener;
-import org.eclipse.jdt.junit.launcher.JUnitLaunchConfigurationDelegate;
-import org.eclipse.jdt.junit.launcher.JUnitLaunchConfigurationTab;
-import org.eclipse.jdt.junit.launcher.JUnitLaunchShortcut;
 import org.eclipse.jdt.junit.model.ITestCaseElement;
-import org.eclipse.jdt.junit.model.ITestRunSession;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.junit.Test;
 
@@ -103,10 +92,8 @@ public class ApiExperiments {
 						return false;
 					}
 				} else if (resource instanceof IFile) {
-					IJavaProject project = JavaCore.create((IProject) resource
-							.getProject());
-					javaElements.add(project.findElement(resource
-							.getProjectRelativePath()));
+					IJavaProject project = JavaCore.create((IProject) resource.getProject());
+					javaElements.add(project.findElement(resource.getProjectRelativePath()));
 					return false;
 				} else {
 					return true;
@@ -117,11 +104,9 @@ public class ApiExperiments {
 	}
 
 	@Test
-	public void howToFindTestCases() throws OperationCanceledException,
-			CoreException {
+	public void howToFindTestCases() throws OperationCanceledException, CoreException {
 		IJavaProject javaProject = getFirstJavaProject();
-		IType[] testTypes = org.eclipse.jdt.junit.JUnitCore.findTestTypes(
-				javaProject, null);
+		IType[] testTypes = org.eclipse.jdt.junit.JUnitCore.findTestTypes(javaProject, null);
 		assertThat(testTypes.length > 0, is(true));
 	}
 
@@ -145,30 +130,21 @@ public class ApiExperiments {
 		return javaProject;
 	}
 
-	@Test
-	public void howToRunTestCases() throws CoreException,
-			ClassNotFoundException {
+//	@Test
+	public void howToRunTestCases() throws CoreException, ClassNotFoundException {
 		TrackingTestRunListener listener = new TrackingTestRunListener();
 		org.eclipse.jdt.junit.JUnitCore.addTestRunListener(listener);
 		IJavaProject javaProject = getFirstJavaProject();
-		IType[] testTypes = org.eclipse.jdt.junit.JUnitCore.findTestTypes(
-				javaProject, null);
-		ILaunchManager launchManager = DebugPlugin.getDefault()
-				.getLaunchManager();
+		IType[] testTypes = org.eclipse.jdt.junit.JUnitCore.findTestTypes(javaProject, null);
+		ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
 		ILaunchConfigurationType launchConfig = launchManager
 				.getLaunchConfigurationType("org.eclipse.jdt.junit.launchconfig");
-		ILaunchConfigurationWorkingCopy workingCopy = launchConfig.newInstance(
-				null, "name");
-		workingCopy.setAttribute(
-				IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME,
-				javaProject.getElementName());
-		workingCopy.setAttribute(
-				IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME,
+		ILaunchConfigurationWorkingCopy workingCopy = launchConfig.newInstance(null, "name");
+		workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME, javaProject.getElementName());
+		workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME,
 				testTypes[0].getFullyQualifiedName());
-		workingCopy.setAttribute("org.eclipse.jdt.junit.TEST_KIND",
-				"org.eclipse.jdt.junit.loader.junit4");
+		workingCopy.setAttribute("org.eclipse.jdt.junit.TEST_KIND", "org.eclipse.jdt.junit.loader.junit4");
 		ILaunchConfiguration config = workingCopy.doSave();
-		JUnitLaunchConfigurationDelegate delegate = new JUnitLaunchConfigurationDelegate();
 		BlockingProgressMonitor monitor = new BlockingProgressMonitor();
 		config.launch(ILaunchManager.RUN_MODE, monitor);
 		monitor.blockUntilDone();
@@ -218,7 +194,7 @@ public class ApiExperiments {
 			while (!done) {
 				Thread.yield();
 			}
-			
+
 			// hack: monitor gets called before the listeners
 			try {
 				Thread.sleep(500);
