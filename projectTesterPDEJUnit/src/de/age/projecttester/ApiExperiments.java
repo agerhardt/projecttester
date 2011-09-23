@@ -148,7 +148,7 @@ public class ApiExperiments {
 		return javaProject;
 	}
 
-//	@Test
+	@Test
 	public void howToRunTestCases() throws CoreException, ClassNotFoundException {
 		TrackingTestRunListener listener = new TrackingTestRunListener();
 		org.eclipse.jdt.junit.JUnitCore.addTestRunListener(listener);
