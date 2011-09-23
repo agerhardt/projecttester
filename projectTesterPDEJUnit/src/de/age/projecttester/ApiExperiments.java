@@ -26,6 +26,7 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.junit.JUnitCore;
 import org.eclipse.jdt.junit.TestRunListener;
 import org.eclipse.jdt.junit.model.ITestCaseElement;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
@@ -151,7 +152,7 @@ public class ApiExperiments {
 	@Test
 	public void howToRunTestCases() throws CoreException, ClassNotFoundException {
 		TrackingTestRunListener listener = new TrackingTestRunListener();
-		org.eclipse.jdt.junit.JUnitCore.addTestRunListener(listener);
+		JUnitCore.addTestRunListener(listener);
 		IJavaProject javaProject = getFirstJavaProject();
 		IType[] testTypes = org.eclipse.jdt.junit.JUnitCore.findTestTypes(javaProject, null);
 		ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
