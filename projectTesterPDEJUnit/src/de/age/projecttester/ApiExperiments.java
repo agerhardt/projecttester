@@ -182,7 +182,6 @@ public class ApiExperiments {
 
 		@Override
 		public void testCaseStarted(ITestCaseElement testCaseElement) {
-			System.out.println(testCaseElement.toString());
 			startedCases.add(testCaseElement);
 		}
 
