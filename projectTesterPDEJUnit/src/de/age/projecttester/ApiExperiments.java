@@ -15,7 +15,6 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -168,60 +167,13 @@ public class ApiExperiments {
 		config.launch(ILaunchManager.RUN_MODE, monitor);
 		monitor.blockUntilDone();
 
+		// hack: monitor gets called before the listeners
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+		}
+		
 		assertThat(listener.numberOfTestsRun(), is(1));
-	}
-
-	private static final class BlockingProgressMonitor implements IProgressMonitor {
-
-		private boolean done = false;
-
-		@Override
-		public void beginTask(String name, int totalWork) {
-		}
-
-		@Override
-		public void done() {
-			done = true;
-		}
-
-		@Override
-		public void internalWorked(double work) {
-		}
-
-		@Override
-		public boolean isCanceled() {
-			return false;
-		}
-
-		@Override
-		public void setCanceled(boolean value) {
-		}
-
-		@Override
-		public void setTaskName(String name) {
-		}
-
-		@Override
-		public void subTask(String name) {
-		}
-
-		@Override
-		public void worked(int work) {
-		}
-
-		public void blockUntilDone() {
-			while (!done) {
-				Thread.yield();
-			}
-
-			// hack: monitor gets called before the listeners
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e) {
-			}
-			done = false;
-		}
-
 	}
 
 	private final class TrackingTestRunListener extends TestRunListener {
