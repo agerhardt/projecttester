@@ -1,5 +1,8 @@
 package de.age.projecttester.util;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
@@ -18,6 +21,7 @@ public class TestWorkspaceHelper {
 			project.create(monitor);
 			monitor.blockUntilDone();
 		}
+		assertThat(project.exists(), is(true));
 		if (!project.isOpen()) {
 			project.open(monitor);
 			monitor.blockUntilDone();
