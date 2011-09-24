@@ -1,5 +1,6 @@
 package de.age.projecttester.internal.adapter;
 
+import static de.age.projecttester.matcher.AssertMatchers.greaterThan;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -40,7 +41,7 @@ public class ProjectAdapterTest {
 		IProject project = workspace.getRoot().getProject(TestWorkspaceHelper.JAVA_EXAMPLE_PROJECT);
 		IJavaProject javaProject = JavaCore.create(project);
 		ProjectAdapter projectAdapter = new ProjectAdapter(javaProject);
-		assertThat(projectAdapter.getTestableClassnames().length, is(1));
+		assertThat(projectAdapter.getTestableClassnames().length, is(greaterThan(0)));
 	}
 
 }
