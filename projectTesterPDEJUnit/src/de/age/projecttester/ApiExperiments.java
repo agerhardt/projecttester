@@ -32,6 +32,8 @@ import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.age.projecttester.util.BlockingProgressMonitor;
+
 public class ApiExperiments {
 
 	@BeforeClass

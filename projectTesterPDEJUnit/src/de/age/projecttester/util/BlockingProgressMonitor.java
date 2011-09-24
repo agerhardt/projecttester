@@ -1,4 +1,4 @@
-package de.age.projecttester;
+package de.age.projecttester.util;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 
