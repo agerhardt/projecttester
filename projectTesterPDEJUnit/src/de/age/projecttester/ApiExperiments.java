@@ -21,6 +21,7 @@ import org.eclipse.debug.core.ILaunchConfigurationType;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IJavaModel;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
@@ -69,21 +70,8 @@ public class ApiExperiments {
 	@Test
 	public void howToGetOnlyJavaProjects() throws CoreException {
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
-		final ArrayList<IProject> projects = new ArrayList<IProject>();
-		workspace.getRoot().accept(new IResourceVisitor() {
-
-			@Override
-			public boolean visit(IResource resource) throws CoreException {
-				if (resource instanceof IProject) {
-					if (((IProject) resource).hasNature(JavaCore.NATURE_ID))
-						projects.add((IProject) resource);
-					return false;
-				} else {
-					return true;
-				}
-			}
-		});
-		assertThat(projects.size(), is(1));
+		IJavaModel javaModel = JavaCore.create(workspace.getRoot());
+		assertThat(javaModel.getJavaProjects().length, is(1));
 	}
 
 	@Test
@@ -121,22 +109,8 @@ public class ApiExperiments {
 
 	private IJavaProject getFirstJavaProject() throws CoreException {
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
-		final ArrayList<IProject> projects = new ArrayList<IProject>();
-		workspace.getRoot().accept(new IResourceVisitor() {
-
-			@Override
-			public boolean visit(IResource resource) throws CoreException {
-				if (resource instanceof IProject) {
-					if (((IProject) resource).hasNature(JavaCore.NATURE_ID))
-						projects.add((IProject) resource);
-					return false;
-				} else {
-					return true;
-				}
-			}
-		});
-		IJavaProject javaProject = JavaCore.create(projects.get(0));
-		return javaProject;
+		IJavaModel javaModel = JavaCore.create(workspace.getRoot());
+		return javaModel.getJavaProjects()[0];
 	}
 
 	@Test
