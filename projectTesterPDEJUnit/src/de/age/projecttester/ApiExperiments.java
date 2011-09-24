@@ -12,7 +12,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -33,23 +32,13 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.age.projecttester.util.BlockingProgressMonitor;
+import de.age.projecttester.util.TestWorkspaceHelper;
 
 public class ApiExperiments {
 
 	@BeforeClass
 	public static void initializeWorkspace() throws CoreException {
-		IWorkspace workspace = ResourcesPlugin.getWorkspace();
-		IProject project = workspace.getRoot().getProject("exampleProject");
-		BlockingProgressMonitor monitor = new BlockingProgressMonitor();
-		if (!project.exists()) {
-			project.create(monitor);
-			monitor.blockUntilDone();
-		}
-		if (!project.isOpen()) {
-			project.open(monitor);
-			monitor.blockUntilDone();
-		}
-		workspace.build(IncrementalProjectBuilder.FULL_BUILD , monitor);
+		TestWorkspaceHelper.prepareWorkspace();
 	}
 	
 	@Test
