@@ -1,6 +1,8 @@
 package de.age.projecttester.internal;
 
+import org.junit.runner.Result;
+
 public interface JUnit {
 
-	public void runClass(String className);
+	public Result runClass(String className);
 }
