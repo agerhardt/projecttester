@@ -3,6 +3,8 @@ package de.age.projecttester.internal;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.junit.runner.Result;
+
 public class ProjectTestRunner {
 
 	private JUnit junit;
@@ -34,11 +36,14 @@ public class ProjectTestRunner {
 			}
 		}
 
+		
+		Set<Result> results = new HashSet<Result>();
+		
 		for (Project p : testProjects) {
 			String[] testclassNames = p.getTestableClassnames();
 			if (testclassNames != null) {
 				for (String className : testclassNames) {
-					junit.runClass(className);
+					results.add(junit.runClass(p, className));
 				}
 			}
 		}

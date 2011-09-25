@@ -4,5 +4,5 @@ import org.junit.runner.Result;
 
 public interface JUnit {
 
-	public Result runClass(String className);
+	public Result runClass(Project project, String className);
 }
