@@ -23,6 +23,11 @@ public class ProjectAdapter implements Project {
 	}
 
 	@Override
+	public String getName() {
+		return project.getElementName();
+	}
+
+	@Override
 	public String[] getTestableClassnames() {
 		try {
 			IType[] testTypes = JUnitCore.findTestTypes(project, null);
