@@ -4,10 +4,12 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
+import de.age.projecttester.internal.adapter.JUnitAdapterTest;
 import de.age.projecttester.internal.adapter.ProjectSuiteTest;
 
 @RunWith(Suite.class)
-@SuiteClasses({ ConfigurableProjectTest.class, NameRegexFilterTest.class, ProjectTestRunnerTest.class, ProjectSuiteTest.class })
+@SuiteClasses({ ConfigurableProjectTest.class, NameRegexFilterTest.class, ProjectTestRunnerTest.class,
+		ProjectSuiteTest.class, JUnitAdapterTest.class })
 public class AllTests {
 
 }
