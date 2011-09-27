@@ -24,7 +24,10 @@ public class JUnitAdapter implements JUnit {
 
 	@Override
 	public Result runTestClasses() {
-		return null;
+		if (core == null) {
+			throw new IllegalStateException("Start the session before running tests.");
+		}
+		return core.run();
 	}
 	
 }
