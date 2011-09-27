@@ -1,6 +1,5 @@
 package de.age.projecttester.internal.adapter;
 
-import org.junit.internal.builders.AllDefaultPossibilitiesBuilder;
 import org.junit.runner.Description;
 import org.junit.runner.Runner;
 import org.junit.runners.Suite;
@@ -12,9 +11,8 @@ public class ProjectSuite extends Suite {
 
 	private Project project;
 
-	@SuppressWarnings("restriction")
 	public ProjectSuite(Project project, Class<?>... classes) throws InitializationError {
-		super(new AllDefaultPossibilitiesBuilder(true), classes);
+		super((Class<?>) null, classes);
 		this.project = project;
 	}
 
