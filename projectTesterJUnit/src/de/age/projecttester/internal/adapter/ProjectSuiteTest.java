@@ -5,9 +5,7 @@ import static org.junit.Assert.assertThat;
 
 import org.easymock.EasyMock;
 import org.junit.Test;
-import org.junit.internal.builders.AllDefaultPossibilitiesBuilder;
 import org.junit.runners.model.InitializationError;
-import org.junit.runners.model.RunnerBuilder;
 
 import de.age.projecttester.internal.Project;
 
@@ -24,9 +22,7 @@ public class ProjectSuiteTest {
 		
 		EasyMock.replay(project);
 		
-		RunnerBuilder builder = EasyMock.createMock(RunnerBuilder.class);
-		
-		ProjectSuite suite = new ProjectSuite(project, builder, new Class<?>[0]);
+		ProjectSuite suite = new ProjectSuite(project);
 		assertThat(suite.getDescription().getDisplayName(), is(projectName));
 	}
 	
@@ -42,9 +38,7 @@ public class ProjectSuiteTest {
 		
 		EasyMock.replay(project);
 		
-		AllDefaultPossibilitiesBuilder runnerBuilder = new AllDefaultPossibilitiesBuilder(true);
-		
-		ProjectSuite suite = new ProjectSuite(project, runnerBuilder, new Class<?>[] { Class.forName(className1) });
+		ProjectSuite suite = new ProjectSuite(project, Class.forName(className1));
 		assertThat(suite.getDescription().getChildren().size(), is(1));
 	}
 }
