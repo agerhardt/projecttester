@@ -65,4 +65,17 @@ public class JUnitAdapterTest {
 		assertThat(result.wasSuccessful(), is(false));
 	}
 
+	@Test
+	public void multipleClassFailure() {
+		adapter.startSession();
+		Project project = EasyMock.createMock(Project.class);
+		EasyMock.expect(project.getName()).andStubReturn("exampleProject");
+		EasyMock.replay(project);
+		adapter.addTestClass(project, ExampleJUnit4Class.class.getName());
+		adapter.addTestClass(project, OnlySuccessfulTests.class.getName());
+		Result result = adapter.runTestClasses();
+		assertThat(result, is(notNullValue()));
+		assertThat(result.wasSuccessful(), is(false));
+	}
+
 }
