@@ -12,7 +12,11 @@ import org.junit.runners.model.InitializationError;
 
 import de.age.projecttester.internal.JUnit;
 import de.age.projecttester.internal.Project;
+import de.age.projecttester.internal.ProjectTestRunner;
 
+/**
+ * TODO consider joining this and {@link ProjectTestRunner}, this class is in a way reversing some of the work that {@link ProjectTestRunner} is doing.
+ */
 public class JUnitAdapter implements JUnit {
 
 	private JUnitCore core;
