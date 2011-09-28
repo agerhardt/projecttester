@@ -76,6 +76,7 @@ public class JUnitAdapterTest {
 		Result result = adapter.runTestClasses();
 		assertThat(result, is(notNullValue()));
 		assertThat(result.wasSuccessful(), is(false));
+		assertThat(result.getFailureCount(), is(2));
 	}
-
+	
 }
