@@ -1,5 +1,10 @@
 package de.age.projecttester.internal.adapter;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Request;
 import org.junit.runner.Result;
@@ -11,21 +16,31 @@ import de.age.projecttester.internal.Project;
 public class JUnitAdapter implements JUnit {
 
 	private JUnitCore core;
-	private Project project;
-	private String className;
-	
+	private Map<Project, List<Class<?>>> testClasses;
+
 	public JUnitAdapter() {
 		core = null;
+		testClasses = new HashMap<Project, List<Class<?>>>();
 	}
-	
+
 	public void startSession() {
 		core = new JUnitCore();
+		testClasses.clear();
 	}
-	
+
 	@Override
 	public void addTestClass(Project project, String className) {
-		this.project = project;
-		this.className = className;
+		List<Class<?>> classList = testClasses.get(project);
+		if (classList == null) {
+			classList = new ArrayList<Class<?>>();
+			testClasses.put(project, classList);
+		}
+		try {
+			classList.add(Class.forName(className));
+		} catch (ClassNotFoundException e) {
+			// TODO meaningful exception
+			throw new RuntimeException();
+		}
 	}
 
 	@Override
@@ -33,19 +48,31 @@ public class JUnitAdapter implements JUnit {
 		if (core == null) {
 			throw new IllegalStateException("Start the session before running tests.");
 		}
+		ProjectSuite[] projectSuites = new ProjectSuite[testClasses.size()];
+		int index = 0;
+		for (Map.Entry<Project, List<Class<?>>> entry : testClasses.entrySet()) {
+			projectSuites[index++] = createProjectSuite(entry.getKey(), entry.getValue());
+		}
 		try {
-			if (className != null) {
-				Class<?> clazz = Class.forName(className);
-				ProjectSuite suite = new ProjectSuite(project, clazz);
-				return core.run(Request.runner(suite));
-			} else {
-				return core.run();
-			}
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException();
+			MultiProjectSuite wrapperSuite = new MultiProjectSuite(projectSuites);
+			return core.run(Request.runner(wrapperSuite));
 		} catch (InitializationError e) {
+			// TODO meaningful exception
 			throw new RuntimeException();
 		}
 	}
-	
+
+	private ProjectSuite createProjectSuite(Project project, List<Class<?>> classes) {
+		try {
+			if (classes == null) {
+				return new ProjectSuite(project);
+			} else {
+				return new ProjectSuite(project, classes.toArray(new Class<?>[classes.size()]));
+			}
+		} catch (InitializationError e) {
+			// TODO meaningful exception
+			throw new RuntimeException();
+		}
+	}
+
 }
