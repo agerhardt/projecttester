@@ -42,4 +42,9 @@ public class ConfigurableProject implements Project {
 		return wrappedProject.getDependantProjects();
 	}
 
+	@Override
+	public Class<?> loadClass(String className) {
+		return wrappedProject.loadClass(className);
+	}
+
 }

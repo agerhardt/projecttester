@@ -7,5 +7,7 @@ public interface Project {
 	String[] getTestableClassnames();
 
 	Project[] getDependantProjects();
-	
+
+	Class<?> loadClass(String className);
+
 }
