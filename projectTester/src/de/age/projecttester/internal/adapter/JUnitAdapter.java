@@ -39,12 +39,7 @@ public class JUnitAdapter implements JUnit {
 			classList = new ArrayList<Class<?>>();
 			testClasses.put(project, classList);
 		}
-		try {
-			classList.add(Class.forName(className));
-		} catch (ClassNotFoundException e) {
-			// TODO meaningful exception
-			throw new RuntimeException();
-		}
+			classList.add(project.loadClass(className));
 	}
 
 	@Override
@@ -62,7 +57,7 @@ public class JUnitAdapter implements JUnit {
 			return core.run(Request.runner(wrapperSuite));
 		} catch (InitializationError e) {
 			// TODO meaningful exception
-			throw new RuntimeException();
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -75,7 +70,7 @@ public class JUnitAdapter implements JUnit {
 			}
 		} catch (InitializationError e) {
 			// TODO meaningful exception
-			throw new RuntimeException();
+			throw new RuntimeException(e);
 		}
 	}
 
