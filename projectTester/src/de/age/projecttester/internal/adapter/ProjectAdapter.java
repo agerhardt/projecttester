@@ -1,8 +1,15 @@
 package de.age.projecttester.internal.adapter;
 
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLClassLoader;
+
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.junit.JUnitCore;
 
 import de.age.projecttester.internal.Project;
@@ -13,6 +20,7 @@ import de.age.projecttester.internal.Project;
 public class ProjectAdapter implements Project {
 
 	private IJavaProject project;
+	private ClassLoader binClassLoader;
 	
 	public ProjectAdapter(IJavaProject project) {
 		super();
@@ -20,6 +28,18 @@ public class ProjectAdapter implements Project {
 			throw new NullPointerException("Wrapped project must not be <null>.");
 		}
 		this.project = project;
+		IPath outputLocation;
+		try {
+			outputLocation = project.getOutputLocation();
+		} catch (JavaModelException e) {
+			throw new RuntimeException(e);
+		}
+		URI output = outputLocation.toFile().toURI();
+		try {
+			binClassLoader = new URLClassLoader(new URL[] { output.toURL() } );
+		} catch (MalformedURLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override
@@ -46,6 +66,15 @@ public class ProjectAdapter implements Project {
 	public Project[] getDependantProjects() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public Class<?> loadClass(String className) {
+		try {
+			return binClassLoader.loadClass(className);
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 }
