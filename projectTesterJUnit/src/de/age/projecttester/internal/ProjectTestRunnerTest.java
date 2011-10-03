@@ -20,8 +20,9 @@ public class ProjectTestRunnerTest {
 		EasyMock.expect(project.getDependantProjects()).andStubReturn(new Project[0]);
 		
 		JUnit junitMock = EasyMock.createMock(JUnit.class);
-		junitMock.runClass(className1);
-		junitMock.runClass(className2);
+		junitMock.addTestClass(project, className1);
+		junitMock.addTestClass(project, className2);
+		EasyMock.expect(junitMock.runTestClasses()).andReturn(null);
 		EasyMock.replay(junitMock, project);
 		
 		ProjectTestRunner runner = new ProjectTestRunner(junitMock);
@@ -44,8 +45,9 @@ public class ProjectTestRunnerTest {
 		EasyMock.expect(mainProject.getDependantProjects()).andStubReturn(new Project[] { depProject });
 		
 		JUnit junitMock = EasyMock.createMock(JUnit.class);
-		junitMock.runClass(className1);
-		junitMock.runClass(dependantClassName);
+		junitMock.addTestClass(mainProject, className1);
+		junitMock.addTestClass(depProject, dependantClassName);
+		EasyMock.expect(junitMock.runTestClasses()).andReturn(null);
 		EasyMock.replay(junitMock, mainProject, depProject);
 		
 		ProjectTestRunner runner = new ProjectTestRunner(junitMock);
@@ -61,6 +63,7 @@ public class ProjectTestRunnerTest {
 		EasyMock.expect(project.getDependantProjects()).andStubReturn(new Project[0]);
 		
 		JUnit junitMock = EasyMock.createMock(JUnit.class);
+		EasyMock.expect(junitMock.runTestClasses()).andReturn(null);
 		
 		EasyMock.replay(junitMock, project);
 
@@ -77,6 +80,7 @@ public class ProjectTestRunnerTest {
 		EasyMock.expect(project.getDependantProjects()).andStubReturn(null);
 		
 		JUnit junitMock = EasyMock.createMock(JUnit.class);
+		EasyMock.expect(junitMock.runTestClasses()).andReturn(null);
 		
 		EasyMock.replay(junitMock, project);
 
@@ -108,10 +112,11 @@ public class ProjectTestRunnerTest {
 		EasyMock.expect(mainProject.getDependantProjects()).andStubReturn(new Project[] { depProject1, depProject2 });
 		
 		JUnit junitMock = EasyMock.createMock(JUnit.class);
-		junitMock.runClass(className1);
-		junitMock.runClass(depClassName1);
-		junitMock.runClass(depClassName2);
-		junitMock.runClass(depClassName3);
+		junitMock.addTestClass(mainProject, className1);
+		junitMock.addTestClass(depProject1, depClassName1);
+		junitMock.addTestClass(depProject2, depClassName2);
+		junitMock.addTestClass(depProject3, depClassName3);
+		EasyMock.expect(junitMock.runTestClasses()).andReturn(null);
 		EasyMock.replay(junitMock, mainProject, depProject1, depProject2, depProject3);
 		
 		ProjectTestRunner runner = new ProjectTestRunner(junitMock);

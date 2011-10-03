@@ -22,6 +22,11 @@ public class ConfigurableProject implements Project {
 	}
 
 	@Override
+	public String getName() {
+		return wrappedProject.getName();
+	}
+
+	@Override
 	public String[] getTestableClassnames() {
 		ArrayList<String> filteredClassnameList = new ArrayList<String>();
 		for (String classname : wrappedProject.getTestableClassnames()) {
@@ -35,6 +40,11 @@ public class ConfigurableProject implements Project {
 	@Override
 	public Project[] getDependantProjects() {
 		return wrappedProject.getDependantProjects();
+	}
+
+	@Override
+	public Class<?> loadClass(String className) {
+		return wrappedProject.loadClass(className);
 	}
 
 }

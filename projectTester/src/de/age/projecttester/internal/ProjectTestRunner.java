@@ -38,9 +38,10 @@ public class ProjectTestRunner {
 			String[] testclassNames = p.getTestableClassnames();
 			if (testclassNames != null) {
 				for (String className : testclassNames) {
-					junit.runClass(className);
+					junit.addTestClass(p, className);
 				}
 			}
 		}
+		junit.runTestClasses();
 	}
 }

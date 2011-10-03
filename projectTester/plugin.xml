@@ -18,7 +18,7 @@
          <action
                label="Test Project"
                class="de.age.projecttester.popup.actions.TestProjectAction"
-               menubarPath="projectTester.menu1/group1"
+               menubarPath="de.age.projectTester.menu1/group1"
                enablesFor="1"
                id="de.age.projectTester.newAction">
          </action>
