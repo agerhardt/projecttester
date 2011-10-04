@@ -4,7 +4,6 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.jdt.core.search.IJavaSearchConstants;
-import org.eclipse.jdt.core.search.IJavaSearchScope;
 import org.eclipse.jdt.internal.core.search.JavaWorkspaceScope;
 import org.eclipse.jdt.internal.ui.dialogs.FilteredTypesSelectionDialog;
 import org.eclipse.jface.preference.PreferencePage;
@@ -20,6 +19,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.PropertyPage;
 
+@SuppressWarnings("restriction")
 public class SimpleProjecttesterPropertyPage extends PropertyPage {
 
 	private static final String TEST_CLASS_TITLE = "Testclass";
@@ -49,7 +49,6 @@ public class SimpleProjecttesterPropertyPage extends PropertyPage {
 		browseClassButton.addSelectionListener(new SelectionAdapter() {
 
 			@Override
-			@SuppressWarnings("restriction")
 			public void widgetSelected(SelectionEvent e) {
 				FilteredTypesSelectionDialog searchTypes = new FilteredTypesSelectionDialog(getShell(), false, null,
 						new JavaWorkspaceScope(), IJavaSearchConstants.CLASS_AND_ENUM);
