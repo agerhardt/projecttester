@@ -3,9 +3,17 @@ package de.age.simpleprojecttester.properties;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.QualifiedName;
+import org.eclipse.jdt.core.search.IJavaSearchConstants;
+import org.eclipse.jdt.core.search.IJavaSearchScope;
+import org.eclipse.jdt.internal.core.search.JavaWorkspaceScope;
+import org.eclipse.jdt.internal.ui.dialogs.FilteredTypesSelectionDialog;
+import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -14,63 +22,51 @@ import org.eclipse.ui.dialogs.PropertyPage;
 
 public class SimpleProjecttesterPropertyPage extends PropertyPage {
 
-	private static final String PATH_TITLE = "Path:";
-	private static final String OWNER_TITLE = "&Owner:";
-	private static final String OWNER_PROPERTY = "OWNER";
-	private static final String DEFAULT_OWNER = "John Doe";
-
+	private static final String TEST_CLASS_TITLE = "Testclass";
+	private static final String BROWSE_CLASS_TITLE = "Browse";
+	private static final String TEST_CLASS_PROPERTY = "simpleprojecttester.testclass";
 	private static final int TEXT_FIELD_WIDTH = 50;
 
-	private Text ownerText;
+	private Text testClassText;
+	private Button browseClassButton;
 
-	/**
-	 * Constructor for SamplePropertyPage.
-	 */
-	public SimpleProjecttesterPropertyPage() {
-		super();
-	}
-
-	private void addFirstSection(Composite parent) {
+	private void addSection(Composite parent) {
 		Composite composite = createDefaultComposite(parent);
 
-		//Label for path field
-		Label pathLabel = new Label(composite, SWT.NONE);
-		pathLabel.setText(PATH_TITLE);
+		Label testClassLabel = new Label(composite, SWT.NONE);
+		testClassLabel.setText(TEST_CLASS_TITLE);
 
-		// Path text field
-		Text pathValueText = new Text(composite, SWT.WRAP | SWT.READ_ONLY);
-		pathValueText.setText(((IResource) getElement()).getFullPath().toString());
-	}
-
-	private void addSeparator(Composite parent) {
-		Label separator = new Label(parent, SWT.SEPARATOR | SWT.HORIZONTAL);
-		GridData gridData = new GridData();
-		gridData.horizontalAlignment = GridData.FILL;
-		gridData.grabExcessHorizontalSpace = true;
-		separator.setLayoutData(gridData);
-	}
-
-	private void addSecondSection(Composite parent) {
-		Composite composite = createDefaultComposite(parent);
-
-		// Label for owner field
-		Label ownerLabel = new Label(composite, SWT.NONE);
-		ownerLabel.setText(OWNER_TITLE);
-
-		// Owner text field
-		ownerText = new Text(composite, SWT.SINGLE | SWT.BORDER);
+		testClassText = new Text(composite, SWT.SINGLE | SWT.BORDER);
 		GridData gd = new GridData();
+		gd.grabExcessHorizontalSpace = true;
 		gd.widthHint = convertWidthInCharsToPixels(TEXT_FIELD_WIDTH);
-		ownerText.setLayoutData(gd);
+		gd.horizontalAlignment = GridData.FILL;
+		testClassText.setLayoutData(gd);
+		browseClassButton = new Button(composite, SWT.NONE);
+		browseClassButton.setText(BROWSE_CLASS_TITLE);
+		gd = new GridData();
+		browseClassButton.setLayoutData(gd);
+		browseClassButton.addSelectionListener(new SelectionAdapter() {
 
-		// Populate owner text field
+			@Override
+			@SuppressWarnings("restriction")
+			public void widgetSelected(SelectionEvent e) {
+				FilteredTypesSelectionDialog searchTypes = new FilteredTypesSelectionDialog(getShell(), false, null,
+						new JavaWorkspaceScope(), IJavaSearchConstants.CLASS_AND_ENUM);
+				searchTypes.setBlockOnOpen(true);
+				int result = searchTypes.open();
+				if (result == FilteredTypesSelectionDialog.OK) {
+					testClassText.setText(searchTypes.getFirstResult().toString());
+				}
+			}
+
+		});
+
 		try {
-			String owner =
-				((IResource) getElement()).getPersistentProperty(
-					new QualifiedName("", OWNER_PROPERTY));
-			ownerText.setText((owner != null) ? owner : DEFAULT_OWNER);
+			String owner = ((IResource) getElement()).getPersistentProperty(new QualifiedName("", TEST_CLASS_PROPERTY));
+			testClassText.setText((owner != null) ? owner : "");
 		} catch (CoreException e) {
-			ownerText.setText(DEFAULT_OWNER);
+			testClassText.setText("");
 		}
 	}
 
@@ -85,16 +81,14 @@ public class SimpleProjecttesterPropertyPage extends PropertyPage {
 		data.grabExcessHorizontalSpace = true;
 		composite.setLayoutData(data);
 
-		addFirstSection(composite);
-		addSeparator(composite);
-		addSecondSection(composite);
+		addSection(composite);
 		return composite;
 	}
 
 	private Composite createDefaultComposite(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NULL);
 		GridLayout layout = new GridLayout();
-		layout.numColumns = 2;
+		layout.numColumns = 3;
 		composite.setLayout(layout);
 
 		GridData data = new GridData();
@@ -107,16 +101,13 @@ public class SimpleProjecttesterPropertyPage extends PropertyPage {
 
 	protected void performDefaults() {
 		super.performDefaults();
-		// Populate the owner text field with the default value
-		ownerText.setText(DEFAULT_OWNER);
+		testClassText.setText("");
 	}
-	
+
 	public boolean performOk() {
-		// store the value in the owner text field
 		try {
-			((IResource) getElement()).setPersistentProperty(
-				new QualifiedName("", OWNER_PROPERTY),
-				ownerText.getText());
+			((IResource) getElement()).setPersistentProperty(new QualifiedName("", TEST_CLASS_PROPERTY),
+					testClassText.getText());
 		} catch (CoreException e) {
 			return false;
 		}

@@ -5,10 +5,10 @@
    <extension
          point="org.eclipse.ui.propertyPages">
       <page
-            name="Project-Test Properties"
-            nameFilter="*.*"
             class="de.age.simpleprojecttester.properties.SimpleProjecttesterPropertyPage"
-            id="de.age.simpleprojecttester.properties.samplePropertyPage">
+            id="de.age.simpleprojecttester.properties.samplePropertyPage"
+            name="Project-Test Properties"
+            nameFilter="*.*">
          <enabledWhen>
             <instanceof
                   value="org.eclipse.jdt.core.IJavaProject">
