@@ -3,6 +3,7 @@ package de.age.simpleprojecttester.properties;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.QualifiedName;
+import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.search.IJavaSearchConstants;
 import org.eclipse.jdt.internal.core.search.JavaWorkspaceScope;
 import org.eclipse.jdt.internal.ui.dialogs.FilteredTypesSelectionDialog;
@@ -55,7 +56,8 @@ public class SimpleProjecttesterPropertyPage extends PropertyPage {
 				searchTypes.setBlockOnOpen(true);
 				int result = searchTypes.open();
 				if (result == FilteredTypesSelectionDialog.OK) {
-					testClassText.setText(searchTypes.getFirstResult().toString());
+					IType firstResult = (IType) searchTypes.getFirstResult();
+					testClassText.setText(firstResult.getFullyQualifiedName());
 				}
 			}
 
