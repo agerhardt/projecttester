@@ -8,12 +8,19 @@
             class="de.age.simpleprojecttester.properties.SimpleProjecttesterPropertyPage"
             id="de.age.simpleprojecttester.properties.samplePropertyPage"
             name="Project-Test Properties"
-            nameFilter="*.*">
+            nameFilter="*">
          <enabledWhen>
-            <instanceof
-                  value="org.eclipse.jdt.core.IJavaProject">
-            </instanceof>
+         	<and>
+	            <instanceof
+	                  value="org.eclipse.core.resources.IProject">
+	            </instanceof>
+             <test
+                   property="org.eclipse.core.resources.projectNature"
+                   value="org.eclipse.jdt.core.javanature">
+             </test>
+            </and>
          </enabledWhen>
+         
       </page>
    </extension>
 
