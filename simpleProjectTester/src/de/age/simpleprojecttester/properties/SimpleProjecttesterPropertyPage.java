@@ -1,12 +1,23 @@
 package de.age.simpleprojecttester.properties;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.QualifiedName;
+import org.eclipse.jdt.core.IJavaModel;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.search.IJavaSearchConstants;
-import org.eclipse.jdt.internal.core.search.JavaWorkspaceScope;
+import org.eclipse.jdt.core.search.IJavaSearchScope;
+import org.eclipse.jdt.core.search.SearchEngine;
 import org.eclipse.jdt.internal.ui.dialogs.FilteredTypesSelectionDialog;
+import org.eclipse.jdt.junit.JUnitCore;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -52,7 +63,7 @@ public class SimpleProjecttesterPropertyPage extends PropertyPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				FilteredTypesSelectionDialog searchTypes = new FilteredTypesSelectionDialog(getShell(), false, null,
-						new JavaWorkspaceScope(), IJavaSearchConstants.CLASS_AND_ENUM);
+						createTestCaseSearchScope(), IJavaSearchConstants.CLASS_AND_ENUM);
 				searchTypes.setBlockOnOpen(true);
 				int result = searchTypes.open();
 				if (result == FilteredTypesSelectionDialog.OK) {
@@ -113,6 +124,26 @@ public class SimpleProjecttesterPropertyPage extends PropertyPage {
 			return false;
 		}
 		return true;
+	}
+	
+	private IJavaSearchScope createTestCaseSearchScope() {
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+		IJavaModel javaModel = JavaCore.create(workspace.getRoot());
+		try {
+			IJavaProject[] javaProjects = javaModel.getJavaProjects();
+			ArrayList<IType> testTypes = new ArrayList<IType>();
+			for (IJavaProject project : javaProjects) {
+				IType[] projectTestTypes = JUnitCore.findTestTypes(project, null);
+				Collections.addAll(testTypes, projectTestTypes);
+			}
+			return SearchEngine.createJavaSearchScope(testTypes.toArray(new IType[testTypes.size()]));
+		} catch (OperationCanceledException e) {
+			// TODO
+			throw new RuntimeException();
+		} catch (CoreException e) {
+			// TODO
+			throw new RuntimeException();
+		}
 	}
 
 }
