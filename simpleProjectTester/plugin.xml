@@ -23,5 +23,13 @@
          
       </page>
    </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M3+F6">
+      </key>
+   </extension>
 
 </plugin>
