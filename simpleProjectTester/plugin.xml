@@ -31,10 +31,19 @@
    <extension
          point="org.eclipse.ui.bindings">
       <key
+            commandId="de.age.simpleprojecttester.commands.testProjectCommand"
             contextId="org.eclipse.ui.contexts.window"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="M3+F6">
       </key>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="de.age.simpleprojecttester.commands.TestProjectCommand"
+            id="de.age.simpleprojecttester.commands.testProjectCommand"
+            name="Test project">
+      </command>
    </extension>
 
 </plugin>
