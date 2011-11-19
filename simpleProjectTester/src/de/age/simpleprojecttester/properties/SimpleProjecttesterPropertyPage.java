@@ -49,6 +49,7 @@ public class SimpleProjecttesterPropertyPage extends PropertyPage {
 		testClassLabel.setText(TEST_CLASS_TITLE);
 
 		testClassText = new Text(composite, SWT.SINGLE | SWT.BORDER);
+		testClassText.setEditable(false);
 		GridData gd = new GridData();
 		gd.grabExcessHorizontalSpace = true;
 		gd.widthHint = convertWidthInCharsToPixels(TEXT_FIELD_WIDTH);
@@ -75,7 +76,8 @@ public class SimpleProjecttesterPropertyPage extends PropertyPage {
 		});
 
 		try {
-			String owner = ((IResource) getElement()).getPersistentProperty(new QualifiedName("", TEST_CLASS_PROPERTY));
+			IResource adapter = (IResource) getElement().getAdapter(IResource.class);
+			String owner = adapter.getPersistentProperty(new QualifiedName("", TEST_CLASS_PROPERTY));
 			testClassText.setText((owner != null) ? owner : "");
 		} catch (CoreException e) {
 			testClassText.setText("");
@@ -118,7 +120,8 @@ public class SimpleProjecttesterPropertyPage extends PropertyPage {
 
 	public boolean performOk() {
 		try {
-			((IResource) getElement()).setPersistentProperty(new QualifiedName("", TEST_CLASS_PROPERTY),
+			IResource adapter = (IResource) getElement().getAdapter(IResource.class);
+			adapter.setPersistentProperty(new QualifiedName("", TEST_CLASS_PROPERTY),
 					testClassText.getText());
 		} catch (CoreException e) {
 			return false;
